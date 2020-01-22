@@ -92,6 +92,7 @@ open class EventSource: NSObject, EventSourceProtocol, URLSessionDataDelegate {
     private var mainQueue = DispatchQueue.main
     private var urlSession: URLSession?
 
+    @objc
     public init(
         url: URL,
         headers: [String: String] = [:]
@@ -106,6 +107,7 @@ open class EventSource: NSObject, EventSourceProtocol, URLSessionDataDelegate {
         super.init()
     }
 
+    @objc
     public func connect(lastEventId: String? = nil) {
         eventStreamParser = EventStreamParser()
         readyState = .connecting
@@ -115,11 +117,13 @@ open class EventSource: NSObject, EventSourceProtocol, URLSessionDataDelegate {
         urlSession?.dataTask(with: url).resume()
     }
 
+    @objc
     public func disconnect() {
         readyState = .closed
         urlSession?.invalidateAndCancel()
     }
 
+    @objc
     public func onOpen(_ onOpenCallback: @escaping (() -> Void)) {
         self.onOpenCallback = onOpenCallback
     }
@@ -128,19 +132,23 @@ open class EventSource: NSObject, EventSourceProtocol, URLSessionDataDelegate {
         self.onComplete = onComplete
     }
 
+    @objc
     public func onMessage(_ onMessageCallback: @escaping ((_ id: String?, _ event: String?, _ data: String?) -> Void)) {
         self.onMessageCallback = onMessageCallback
     }
 
+    @objc
     public func addEventListener(_ event: String,
                                  handler: @escaping ((_ id: String?, _ event: String?, _ data: String?) -> Void)) {
         eventListeners[event] = handler
     }
 
+    @objc
 	public func removeEventListener(_ event: String) {
 		eventListeners.removeValue(forKey: event)
 	}
 
+    @objc
 	public func events() -> [String] {
 		return Array(eventListeners.keys)
 	}
